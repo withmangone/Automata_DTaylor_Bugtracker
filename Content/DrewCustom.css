@@ -1,0 +1,127 @@
+﻿#WideArea {
+    min-width: 100% !important;
+}
+
+.WideButton {
+    min-width: 100% !important;
+}
+
+.HalfButton {
+    width:49% !important;
+}
+
+.ThirdButton {
+    width: 33% !important;
+}
+
+.QuarterButton {
+    width: 25% !important;
+}
+
+.btn-GoodBlue {
+    color: white;
+    background: #348ee3 !important;
+    border-color: #348ee3 !important;
+}
+
+.bg-darkgray {
+    text-decoration-color:white !important;
+    color: white !important;
+    background-color:lightslategray !important;
+}
+
+.invisButton {
+    border: none !important;
+    background-color: transparent !important;
+    color: #fb5597 !important;
+}
+.invisButton:hover{
+    color:lightgray !important;
+    cursor:pointer !important;
+}
+
+.SideBtn {
+    color: #A8ACB1;
+    background-color: transparent;
+    border: none;
+    margin-left: -5px;
+}
+.SideBtn:hover {
+    color: white;
+    cursor: pointer;
+}
+
+.SideLog {
+    margin-left: 20px;
+    color: #A8ACB1;
+}
+.SideLog:hover {
+    color:white;
+}
+
+.LGLink {
+    color:lightgray !important;
+}
+.LGLink:hover {
+    color: white !important;
+}
+
+.slimScrollDiv{
+    height:100% !important;
+}
+
+.fixTr {
+    max-width: 100% !important;
+}
+
+.widget-card:hover {
+    opacity: 0.8;
+}
+
+.DropNotifSize {
+    max-width: 275px !important;
+    min-width: 275px !important;
+    overflow-wrap: normal !important;
+    white-space:normal !important;
+}
+
+.DemoWidget {
+    min-width:185px !important;
+    max-width:185px !important;
+}
+
+.UpASmidge {
+    margin-top:-5px;
+}
+
+.UpABiggerSmidge{
+    margin-top:-26px;
+}
+
+.TicketHistoriesHeight {
+    height: 890px !important;
+}
+
+.NoBottom {
+    border-bottom: none !important;
+}
+
+.ToDoHeight {
+    height: 192px !important;
+}
+
+.nv-axis .tick line {
+    display: none;
+}
+
+.archiveButton {
+    border: none !important;
+    background-color: transparent !important;
+    text-align:left !important;
+    color:#007bff;
+    margin-left:0px !important;
+}
+.archiveButton:hover {
+    cursor:pointer !important;
+    text-decoration:underline !important;
+}

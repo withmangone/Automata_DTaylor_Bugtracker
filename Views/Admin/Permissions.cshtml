@@ -1,0 +1,25 @@
+﻿<br />
+<br />
+<br />
+<div class="icon text-center">
+    <i class="fa fa-lock fa-7x"></i>
+</div>
+<br />
+<div class="text-center">
+    <h2>You don't have the appropriate permissions to view this content.</h2>
+    <br />
+    <br />
+
+
+</div>
+
+@using (Html.BeginForm("Logoff", "Account", FormMethod.Post))
+{
+    @Html.AntiForgeryToken();
+    <div class="text-center">
+        <h5>
+            Did you mean to access this page with a different account? If so, you might need to<button type="submit" class="invisButton">log off and log back on.</button>
+        </h5>
+        <h5>Otherwise, you might need to contact your admin.</h5>
+    </div>
+}

@@ -1,0 +1,115 @@
+﻿@model Automata_DTaylor_Bugtracker.Models.Project
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h1 class="page-header">Project Dashboard <small>For Project "@Html.DisplayFor(modelItem => Model.Name)"</small></h1>
+<br />
+<div>
+    @Html.DisplayFor(model => model.Description)
+</div>
+<br />
+
+<div class="container-fluid">
+    <div class="panel panel-inverse">
+        <div class="panel-heading">
+            <div class="panel-heading-btn">
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-redo"></i></a>
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+            </div>
+            <h4 class="panel-title">Tickets On This Project</h4>
+        </div>
+        <div class="panel-body">
+            <table id="data-table-combine3" class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayName("Title")
+                        </th>
+                        <th>
+                            @Html.DisplayName("Description")
+                        </th>
+                        <th>
+                            @Html.DisplayName("Assigned Developer")
+                        </th>
+                        <th>
+                            @Html.DisplayName("Created By")
+                        </th>
+                        <th>
+                            @Html.DisplayName("Priority")
+                        </th>
+                        <th>
+                            @Html.DisplayName("Status")
+                        </th>
+                        <th>
+                            @Html.DisplayName("Type")
+                        </th>
+                        <th>
+                            @Html.DisplayName("")
+                        </th>
+                        <th>
+                            @Html.DisplayName("Created")
+                        </th>
+                        <th>
+                            @Html.DisplayName("Updated")
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Tickets)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Title)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Description)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.AssignedToUser.FullName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.OwnerUser.FullName)
+                            </td>
+                            <td data-sort="@item.TicketPriority.Importance">
+                                @Html.DisplayFor(modelItem => item.TicketPriority.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.TicketStatus.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.TicketType.Name)
+                            </td>
+                            <td>
+                                @Html.ActionLink("Edit", "Edit", new { id = item.Id })
+                                <br />
+                                @Html.ActionLink("Dashboard", "Details", "Tickets", new { id = item.Id }, null)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Created.DateTime)
+                            </td>
+                            <td>
+                                @if (item.Updated != null)
+                                {
+                                    @Html.DisplayFor(modelItem => item.Updated.GetValueOrDefault().DateTime)
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<br />
+<p>
+    @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
+    {
+        Html.ActionLink("Edit", "Edit", new { id = Model.Id });
+    }
+    @Html.ActionLink("Back to List", "Index")
+</p>

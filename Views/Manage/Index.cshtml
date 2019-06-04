@@ -1,0 +1,199 @@
+﻿@using Automata_DTaylor_Bugtracker.ViewModels
+@model UserProfileViewModel
+@{
+    ViewBag.Title = "Manage";
+}
+
+<h2>Profile Settings</h2>
+<br />
+
+<div class="container-fluid">
+    @using (Html.BeginForm("Index", "Manage", FormMethod.Post, new { enctype = "Multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.Hidden("UserViewModel.ProfilePic", Model.UserViewModel.ProfilePic)
+        <div class="row">
+            <div class="panel panel-inverse WideButton" data-sortable-id="index-5">
+                <div class="panel-heading">
+                    <div class="panel-heading-btn">
+                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-redo"></i></a>
+                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+                    </div>
+                    <h4 class="panel-title">User Settings</h4>
+                </div>
+                <div class="panel-body p-t-0">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.UserViewModel.FirstName, htmlAttributes: new { @class = "control-label col-md-12" })
+                            <div class="col-md-12">
+                                @Html.EditorFor(model => model.UserViewModel.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.UserViewModel.LastName, htmlAttributes: new { @class = "control-label col-md-12" })
+                            <div class="col-md-12">
+                                @Html.EditorFor(model => model.UserViewModel.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.UserViewModel.Email, htmlAttributes: new { @class = "control-label col-md-12" })
+                            <div class="col-md-12">
+                                @Html.EditorFor(model => model.UserViewModel.Email, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+
+                        <div class="form-group m-b-30">
+                            @Html.LabelFor(model => model.UserViewModel.Avatar, htmlAttributes: new { @class = "control-label col-md-12" })
+                            <div class="col-md-12">
+                                <input type="file" name="UserViewModel.Avatar" class="filestyle" data-dragdrop="false" data-btnClass="btn-pink" data-buttonBefore="true" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="panel panel-inverse WideButton" data-sortable-id="index-5">
+                <div class="panel-heading">
+                    <div class="panel-heading-btn">
+                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-redo"></i></a>
+                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+                    </div>
+                    <h4 class="panel-title">Password Settings</h4>
+                </div>
+                <div class="panel-body p-t-0">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.ChangePasswordViewModel.OldPassword, new { @class = "col-md-12 control-label" })
+                            <div class="col-md-12">
+                                @Html.PasswordFor(model => model.ChangePasswordViewModel.OldPassword, new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.ChangePasswordViewModel.NewPassword, new { @class = "col-md-12 control-label" })
+                            <div class="col-md-12">
+                                @Html.PasswordFor(model => model.ChangePasswordViewModel.NewPassword, new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.ChangePasswordViewModel.ConfirmPassword, new { @class = "col-md-12 control-label" })
+                            <div class="col-md-12">
+                                @Html.PasswordFor(model => model.ChangePasswordViewModel.ConfirmPassword, new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="min-width:100%">
+            <div class="col-md-12 text-center m-b-30" style="margin-top:30px">
+                <input type="submit" value="Save" class="btn btn-pink ThirdButton" />
+            </div>
+        </div>
+
+       
+    }
+</div>
+@*<div>
+    <hr />
+
+    @using (Html.BeginForm("Index", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        <h4>Change Password</h4>
+        <br />
+        @Html.ValidationSummary("", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(m => m.ChangePasswordViewModel.OldPassword, new { @class = "col-md-2 control-label" })
+            <div class="col-md-12">
+                @Html.PasswordFor(m => m.ChangePasswordViewModel.OldPassword, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.ChangePasswordViewModel.NewPassword, new { @class = "col-md-2 control-label" })
+            <div class="col-md-12">
+                @Html.PasswordFor(m => m.ChangePasswordViewModel.NewPassword, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.ChangePasswordViewModel.ConfirmPassword, new { @class = "col-md-2 control-label" })
+            <div class="col-md-12">
+                @Html.PasswordFor(m => m.ChangePasswordViewModel.ConfirmPassword, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-12 text-center" style="margin-top:30px">
+                <input type="submit" value="Change password" class="btn btn-pink QuarterButton" />
+            </div>
+        </div>
+    }*@
+
+        @*<dt>External Logins:</dt>
+        <dd>
+            @Model.Logins.Count [
+            @Html.ActionLink("Manage", "ManageLogins") ]
+        </dd>*@
+        @*
+        Phone Numbers can used as a second factor of verification in a two-factor authentication system.
+
+         See <a href="https://go.microsoft.com/fwlink/?LinkId=403804">this article</a>
+            for details on setting up this ASP.NET application to support two-factor authentication using SMS.
+
+         Uncomment the following block after you have set up two-factor authentication
+        *@
+        @*
+        <dt>Phone Number:</dt>
+        <dd>
+            @(Model.PhoneNumber ?? "None")
+            @if (Model.PhoneNumber != null)
+            {
+                <br />
+                <text>[&nbsp;&nbsp;@Html.ActionLink("Change", "AddPhoneNumber")&nbsp;&nbsp;]</text>
+                using (Html.BeginForm("RemovePhoneNumber", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <text>[<input type="submit" value="Remove" class="btn-link" />]</text>
+                }
+            }
+            else
+            {
+                <text>[&nbsp;&nbsp;@Html.ActionLink("Add", "AddPhoneNumber")
+            }
+        </dd>
+        *@
+        @*<dt>Two-Factor Authentication:</dt>
+        <dd>
+            <p>
+                There are no two-factor authentication providers configured. See <a href="https://go.microsoft.com/fwlink/?LinkId=403804">this article</a>
+                for details on setting up this ASP.NET application to support two-factor authentication.
+            </p>*@
+        @*@if (Model.TwoFactor)
+        {
+            using (Html.BeginForm("DisableTwoFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+                <text>Enabled
+                <input type="submit" value="Disable" class="btn btn-link" />
+                </text>
+            }
+        }
+        else
+        {
+            using (Html.BeginForm("EnableTwoFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+                <text>Disabled
+                <input type="submit" value="Enable" class="btn btn-link" />
+                </text>
+            }
+        }*@
+        @*</dd>*@
+
+

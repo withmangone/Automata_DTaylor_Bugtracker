@@ -1,0 +1,374 @@
+﻿@using Microsoft.AspNet.Identity
+@using Automata_DTaylor_Bugtracker.Models
+@using Automata_DTaylor_Bugtracker.Helpers
+
+
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en">
+<!--<![endif]-->
+<head>
+    <meta charset="utf-8" />
+    <title>DT BugTracker</title>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
+
+    <!--favicon-->
+    <link name="favicon" id="favicon" rel="shortcut icon" type="image/x-icon" href="~/favicon.ico" />
+
+    <!-- ================== BEGIN BASE CSS STYLE ================== -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
+    <link href="~/Content/jquery-ui.min.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+    <link href="~/Content/animate.min.css" rel="stylesheet" />
+    <link href="~/Content/style.min.css" rel="stylesheet" />
+    <link href="~/Content/style-responsive.min.css" rel="stylesheet" />
+    <link href="~/Content/pink.css" rel="stylesheet" id="theme" />
+    <link href="~/Content/DrewCustom.css" rel="stylesheet" />
+    <!-- ================== END BASE CSS STYLE ================== -->
+    <!-- ================== BEGIN PAGE LEVEL STYLE ================== -->
+    <link href="~/Content/jquery-jvectormap.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-datepicker.css" rel="stylesheet" />
+    <link href="~/Content/jquery.gritter.css" rel="stylesheet" />
+    <link href="~/Content/dataTables.bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/buttons.bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/responsive.bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/autoFill.bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/colReorder.bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/keyTable.bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/rowReorder.bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/select.bootstrap.min.css" rel="stylesheet" />
+    <!-- ================== END PAGE LEVEL STYLE ================== -->
+    <!-- ================== BEGIN BASE JS ================== -->
+    <script src="~/Scripts/pace.min.js"></script>
+    <link href="~/Content/nv.d3.css" rel="stylesheet" />
+    <script src="~/Scripts/moment.min.js"></script>
+    <!-- ================== END BASE JS ================== -->
+</head>
+<body>
+    <!-- begin #page-loader -->
+    <div id="page-loader" class="fade show"><span class="spinner"></span></div>
+    <!-- end #page-loader -->
+    <!-- begin #page-container -->
+    <div id="page-container" class="fade page-sidebar-fixed page-header-fixed">
+        <!-- begin #header -->
+        <div id="header" class="header navbar-default">
+            <!-- begin navbar-header -->
+            <div class="navbar-header">
+                <a class="navbar-brand"><img src="~/Images/FA_Bug_28x28.png" style="margin-top:-5px; margin-right:15px"><b>DT</b> BugTracker</a>
+                <button type="button" class="navbar-toggle" data-click="sidebar-toggled">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <!-- end navbar-header -->
+            <!-- begin header-nav -->
+            <ul class="navbar-nav navbar-right">
+                @if ((User.IsInRole("ProjectManager")) || (User.IsInRole("Developer")) || (User.IsInRole("Submitter")))
+                {
+                    var db = new ApplicationDbContext();
+                    var ticketNotifications = db.TicketNotifications;
+                    var notificationHelper = new NotificationHelper();
+                    var projectNotificationHelper = new ProjectNotificationHelper();
+                    <li class="dropdown m-r-10 m-t-5">
+                        <a href="#" data-toggle="dropdown" class="dropdown-toggle f-s-14">
+                            <i class="fa fa-bell"></i>
+                            @{
+                                var userId = User.Identity.GetUserId();
+                                var totalNotifications = notificationHelper.ListUserUnreadNotifications(userId).Count() + projectNotificationHelper.ListUserUnreadProjectNotifications(User.Identity.GetUserId()).Count();
+                            }
+                            @if (totalNotifications > 0)
+                            {
+                                <span class="label">@totalNotifications</span>
+                            }
+                        </a>
+                        <ul class="dropdown-menu media-list dropdown-menu-right">
+                            <li class="dropdown-header">NOTIFICATIONS (@totalNotifications)</li>
+                            @foreach (var project in projectNotificationHelper.ListUserUnreadProjectNotifications(User.Identity.GetUserId()))
+                            {
+                                <li class="media">
+                                    <a href="@Url.Action("UnreadIndex", "TicketNotifications")">
+                                        <div class="media-left">
+                                            <i class="fa fa-project-diagram media-object bg-silver-darker"></i>
+                                        </div>
+                                        <div class="media-body DropNotifSize">
+                                            <h6 class="media-heading">@project.NotificationBody</h6>
+                                            <div class="text-muted f-s-11">
+                                                <script>
+                                                    document.write(moment('@project.Created').fromNow())
+                                                </script>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                            }
+                            @foreach (var ticket in notificationHelper.ListUserUnreadNotifications(User.Identity.GetUserId()))
+                            {
+                                <li class="media">
+                                    <a href="@Url.Action("UnreadIndex", "TicketNotifications")">
+                                        <div class="media-left">
+                                            <i class="fa fa-ticket-alt media-object bg-silver-darker"></i>
+                                        </div>
+                                        <div class="media-body DropNotifSize">
+                                            <h6 class="media-heading">@ticket.NotificationBody</h6>
+                                            <div class="text-muted f-s-11">
+                                                <script>
+                                                    document.write(moment('@ticket.Created').fromNow())
+                                                </script>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                            }
+                            <li class="dropdown-footer text-center">
+                                <a href="@Url.Action("Index", "TicketNotifications")">View all</a>
+                            </li>
+                        </ul>
+                    </li>
+                }
+                
+
+                @*<li>
+                    <form class="navbar-form">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Enter keyword" />
+                            <button type="submit" class="btn btn-search"><i class="fa fa-search"></i></button>
+                        </div>
+                    </form>
+                </li>*@
+            </ul>
+            <!-- end header navigation right -->
+        </div>
+        <!-- end #header -->
+        <!-- begin #sidebar -->
+        <div id="sidebar" class="sidebar">
+            <!-- begin sidebar scrollbar -->
+            <div data-scrollbar="true" data-height="100%">
+                <!-- begin sidebar user -->
+                @if (User.Identity.IsAuthenticated)
+                {
+                    var userId = User.Identity.GetUserId();
+                    var db = new ApplicationDbContext();
+                    var fullName = db.Users.Find(userId).FullName;
+                    var roleHelper = new RoleHelper();
+                    var profilePic = db.Users.Find(userId).ProfilePic;
+
+                    <ul class="nav">
+                        <li class="nav-profile">
+                            <a href="" data-toggle="nav-profile">
+                                <div class="cover with-shadow">
+                                    <img src="~/Images/Clouds_220x119.jpg"/>
+                                </div>
+                                <div class="image">
+                                    <img src="@profilePic" alt="" />
+                                </div>
+                                <div class="info">
+                                    <b class="caret pull-right"></b>
+                                    @fullName
+                                    <small>
+                                        @if (roleHelper.ListUserRoles(userId).FirstOrDefault() == "ProjectManager")
+                                        {
+                                            <span>Project Manager</span>
+                                        }
+                                        else
+                                        {
+                                            @roleHelper.ListUserRoles(userId).FirstOrDefault();
+                                        }
+                                    </small>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <ul class="nav nav-profile HoverWhite m-t-10">
+                                @if ((User.IsInRole("ProjectManager")) || (User.IsInRole("Developer")) || (User.IsInRole("Submitter")))
+                                {
+                                    <li><a href="@Url.Action("Index", "TicketNotifications")"><i class="fa fa-envelope-open-text"></i>All Notifications</a></li>
+                                }
+                                <li><a href="@Url.Action("Index", "Manage")"><i class="fa fa-cog"></i> Edit Profile</a></li>
+                                @using (Html.BeginForm("Logoff", "Account", FormMethod.Post))
+                                {
+                                    @Html.AntiForgeryToken();
+                                    <li class="m-b-10" style="margin-top:8px"><a href="" class="SideLog"></a><button type="submit" class="SideBtn"><i class="fa fa-key"></i>&nbsp;&nbsp; Log Off</button></li>
+                                }
+
+                            </ul>
+                        </li>
+                    </ul>
+                }
+
+                <!-- end sidebar user -->
+                <!-- begin sidebar nav -->
+                <ul class="nav nav-list">
+                    <li class="nav-header">Navigation</li>
+                    <li class="has-sub">
+                        <a href="@Url.Action("Index", "Home")">
+                            <i class="fa fa-th-large"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li class="has-sub">
+                            <a href="@Url.Action("Index", "Projects")">
+                                <i class="fa fa-tasks"></i>
+                                <span>Projects Index</span>
+                            </a>
+                        </li>
+                    }
+                    else if (User.IsInRole("ProjectManager"))
+                    {
+                        <li class="has-sub">
+                            <a href="@Url.Action("Index", "Projects")">
+                                <i class="fa fa-tasks"></i>
+                                <span>Projects Index</span>
+                            </a>
+                        </li>
+                    }
+                    @if ((User.IsInRole("Submitter")) || (User.IsInRole("Developer")) || (User.IsInRole("ProjectManager")))
+                    {
+                        <li class="has-sub">
+                            <a href="@Url.Action("MyIndex", "Projects")">
+                                <i class="fa fa-project-diagram"></i>
+                                <span>My Projects</span>
+                            </a>
+                        </li>
+                    }
+                    <li class="has-sub">
+                        <a href="@Url.Action("Index", "Tickets")">
+                            <i class="fa fa-ticket-alt"></i>
+                            <span>My Tickets</span>
+                        </a>
+                    </li>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li class="has-sub">
+                            <a href="@Url.Action("UserIndex", "Admin")">
+                                <i class="fa fa-gem"></i>
+                                <span>User Index</span>
+                            </a>
+                        </li>
+                    }
+
+
+                    <!-- begin sidebar minify button -->
+                    <li><a href="javascript:;" class="sidebar-minify-btn" data-click="sidebar-minify"><i class="fa fa-angle-double-left"></i></a></li>
+                    <!-- end sidebar minify button -->
+                </ul>
+                <!-- end sidebar nav -->
+            </div>
+            <!-- end sidebar scrollbar -->
+        </div>
+        <div class="sidebar-bg"></div>
+        <!-- end #sidebar -->
+        <!-- begin #content -->
+        <div id="content" class="content">
+            @RenderBody()
+        </div>
+        <!-- end #content -->
+        <!-- begin scroll to top btn -->
+        <a href="javascript:;" class="btn btn-icon btn-circle btn-success btn-scroll-to-top fade" data-click="scroll-top"><i class="fa fa-angle-up"></i></a>
+        <!-- end scroll to top btn -->
+    </div>
+    <!-- end page container -->
+    <!-- ================== BEGIN BASE JS ================== -->
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+    <script src="~/Scripts/jquery-ui.min.js"></script>
+    <script src="~/Scripts/bootstrap.bundle.min.js"></script>
+    <!--[if lt IE 9]>
+        <script src="../assets/crossbrowserjs/html5shiv.js"></script>
+        <script src="../assets/crossbrowserjs/respond.min.js"></script>
+        <script src="../assets/crossbrowserjs/excanvas.min.js"></script>
+    <![endif]-->
+    <script src="~/Scripts/jquery.slimscroll.min.js"></script>
+    <script src="~/Scripts/js.cookie.js"></script>
+    <script src="~/Scripts/default.min.js"></script>
+    @*<script src="~/Scripts/apps.min.js"></script>*@
+    <script src="~/Scripts/apps.js"></script>
+    <!-- ================== END BASE JS ================== -->
+    <!-- ================== BEGIN PAGE LEVEL JS ================== -->
+    @*<script src="~/Scripts/jquery.gritter.js"></script>*@
+    <script src="~/Scripts/jquery.flot.min.js"></script>
+    <script src="~/Scripts/jquery.flot.time.min.js"></script>
+    <script src="~/Scripts/jquery.flot.resize.min.js"></script>
+    <script src="~/Scripts/jquery.flot.pie.min.js"></script>
+    <script src="~/Scripts/jquery.sparkline.js"></script>
+    <script src="~/Scripts/jquery-jvectormap.min.js"></script>
+    <script src="~/Scripts/jquery-jvectormap-world-mill-en.js"></script>
+    <script src="~/Scripts/bootstrap-datepicker.js"></script>
+    <script src="~/Scripts/dashboard.min.js"></script>
+    <script src="~/Scripts/jquery.dataTables.js"></script>
+    <script src="~/Scripts/dataTables.bootstrap.min.js"></script>
+    <script src="~/Scripts/dataTables.buttons.min.js"></script>
+    <script src="~/Scripts/buttons.bootstrap.min.js"></script>
+    <script src="~/Scripts/buttons.flash.min.js"></script>
+    <script src="~/Scripts/jszip.min.js"></script>
+    <script src="~/Scripts/pdfmake.min.js"></script>
+    <script src="~/Scripts/vfs_fonts.min.js"></script>
+    <script src="~/Scripts/buttons.html5.min.js"></script>
+    <script src="~/Scripts/buttons.print.min.js"></script>
+    <script src="~/Scripts/dataTables.responsive.min.js"></script>
+    <script src="~/Scripts/dataTables.autoFill.min.js"></script>
+    <script src="~/Scripts/dataTables.colReorder.min.js"></script>
+    <script src="~/Scripts/dataTables.keyTable.min.js"></script>
+    <script src="~/Scripts/dataTables.rowReorder.min.js"></script>
+    <script src="~/Scripts/dataTables.select.min.js"></script>
+    <script src="~/Scripts/table-manage-combine.demo.js"></script>
+    <script src="~/Scripts/timeline.demo.min.js"></script>
+    <script src="~/Scripts/bootstrap-filestyle.min.js"></script>
+    <script src="~/Scripts/d3.min.js"></script>
+    <script src="~/Scripts/nv.d3.js"></script>
+    @*<script src="~/Scripts/chart-d3.demo.min.js"></script>*@
+    <script src="~/Scripts/chart-d3.demo.js"></script>
+    <script src="~/Scripts/DrewCustom.js"></script>
+    <!-- ================== END PAGE LEVEL JS ================== -->
+
+
+
+
+    <script>
+        $(document).ready(function () {
+            App.init();
+            Dashboard.init();
+            TableManageCombine.init();
+            Timeline.init();
+        });
+
+        $(":file").filestyle(
+            {
+                btnClass: "btn-pink",
+                dragdrop: false,
+                buttonBefore: true
+            });
+    </script>
+    <script>
+        $(function () {
+            setNavigation();
+        });
+
+        function setNavigation() {
+            var path = window.location.pathname;
+            path = path.replace(/\/$/, "");
+            path = decodeURIComponent(path);
+
+            $(".nav a").each(function () {
+                var href = $(this).attr('href');
+                if (path.substring(0, href.length) === href) {
+                    $(this).closest('li').addClass('active');
+                }
+            });
+        }
+    </script>
+
+    @RenderSection("scripts", required: false)
+
+</body>
+</html>
+
+
+
+
+
+
+

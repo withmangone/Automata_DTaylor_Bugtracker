@@ -1,0 +1,135 @@
+﻿@{
+    Layout = null;
+}
+
+@using Automata_DTaylor_Bugtracker.Models
+@model RegisterViewModel
+
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en">
+<!--<![endif]-->
+<head>
+    <meta charset="utf-8" />
+    <title>DT BugTracker</title>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
+
+    <!--favicon-->
+    <link name="favicon" id="favicon" rel="shortcut icon" type="image/x-icon" href="~/favicon.ico" />
+
+    <!-- ================== BEGIN BASE CSS STYLE ================== -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
+    <link href="~/Content/jquery-ui.min.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    @*<link href="~/Content/all.min.css" rel="stylesheet" />*@
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+    <link href="~/Content/animate.min.css" rel="stylesheet" />
+    <link href="~/Content/style.min.css" rel="stylesheet" />
+    <link href="~/Content/style-responsive.min.css" rel="stylesheet" />
+    <link href="~/Content/default.css" rel="stylesheet" />
+    <link href="~/Content/DrewCustom.css" rel="stylesheet" />
+    <!-- ================== END BASE CSS STYLE ================== -->
+    <!-- ================== BEGIN BASE JS ================== -->
+    <script src="~/Scripts/pace.min.js"></script>
+    <!-- ================== END BASE JS ================== -->
+
+
+</head>
+<body class="pace-top">
+    <!-- begin #page-loader -->
+    <div id="page-loader" class="fade show"><span class="spinner"></span></div>
+    <!-- end #page-loader -->
+    <!-- begin #page-container -->
+    <div id="page-container" class="fade">
+        <!-- begin register -->
+        <div class="login bg-black animated fadeInDown">
+            <!-- begin brand -->
+            <div class="login-header">
+                <div class="brand">
+                    <img src="~/Images/FA_Bug_28x28.png" style="margin-top:-5px"> <b>DT</b> BugTracker
+                    <small>A responsive app for systems improvement</small>
+                </div>
+                <div class="icon">
+                    <i class="fa fa-lock"></i>
+                </div>
+            </div>
+            <!-- end brand -->
+            <!-- begin register-content -->
+            <div class="login-content">
+                @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { enctype = "Multipart/form-data", @class = "form-horizontal", role = "form" }))
+                {
+                    @Html.AntiForgeryToken();
+                    <div class="row row-space-10">
+                        <div class="col-md-6 m-b-10">
+                            <input type="text" name="FirstName" class="form-control form-control-lg inverse-mode" placeholder="First name *" required />
+                        </div>
+                        <div class="col-md-6 m-b-10">
+                            <input type="text" name="LastName" class="form-control form-control-lg inverse-mode" placeholder="Last name *" required />
+                        </div>
+                    </div>
+                    <div class="row m-b-10">
+                        <div class="col-md-12">
+                            <input type="text" name="Email" class="form-control form-control-lg inverse-mode" placeholder="Email address *" required />
+                        </div>
+                    </div>
+                    <div class="row m-b-10">
+                        <div class="col-md-12">
+                            <input type="password" name="Password" class="form-control form-control-lg inverse-mode" placeholder="Password *" required />
+                        </div>
+                    </div>
+                    <div class="row m-b-10">
+                        <div class="col-md-12">
+                            <input type="password" name="ConfirmPassword" class="form-control form-control-lg inverse-mode" placeholder="Re-enter password *" required />
+                        </div>
+                    </div>
+                    <div class="row m-b-30">
+                        <div class="col-md-12">
+                            <input type="file" name="avatar" class="filestyle inverse-mode" data-dragdrop="false" data-buttonBefore="true" data-btnClass="btn-dark"/>
+                        </div>
+                    </div>
+                    <div class="register-buttons">
+                        <button type="submit" class="btn btn-pink btn-block btn-lg">Sign Up</button>
+                    </div>
+                    <div class="m-t-20">
+                        Already a member? Click <a href="@Url.Action("Login")" class="LGLink">here</a> to login.
+                    </div>
+                }
+
+            </div>
+            <!-- end register-content -->
+        </div>
+        <!-- end register -->
+    </div>
+    <!-- end page container -->
+    <!-- ================== BEGIN BASE JS ================== -->
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+    <script src="~/Scripts/jquery-ui.min.js"></script>
+    <script src="~/Scripts/bootstrap.bundle.min.js"></script>
+    <!--[if lt IE 9]>
+        <script src="../assets/crossbrowserjs/html5shiv.js"></script>
+        <script src="../assets/crossbrowserjs/respond.min.js"></script>
+        <script src="../assets/crossbrowserjs/excanvas.min.js"></script>
+    <![endif]-->
+    <script src="~/Scripts/jquery.slimscroll.min.js"></script>
+    <script src="~/Scripts/js.cookie.js"></script>
+    <script src="~/Scripts/default.min.js"></script>
+    <script src="~/Scripts/apps.min.js"></script>
+    <script src="~/Scripts/bootstrap-filestyle.min.js"></script>
+    <!-- ================== END BASE JS ================== -->
+
+    <script>
+        $(document).ready(function () {
+            App.init();
+        });
+
+        $(":file").filestyle(
+            {
+                btnClass: "btn-dark",
+                placeholder: "Upload A Profile Picture  ~Not Mandatory~",
+                dragdrop: false,
+                buttonBefore: true
+            });
+    </script>
+</body>
+</html>

@@ -1,0 +1,305 @@
+﻿@using Automata_DTaylor_Bugtracker.Helpers
+@using Microsoft.AspNet.Identity
+@using Automata_DTaylor_Bugtracker.Models
+@model Automata_DTaylor_Bugtracker.Models.Ticket
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<!--dash needs: ~tix info ~tix comments ~tix attachments (~tix histories ~tix notifications... not week 2)-->
+<!-- begin breadcrumb -->
+<ol class="breadcrumb pull-right">
+    <li class="breadcrumb-item">
+        @using (Html.BeginForm("Edit", "Tickets", new { Model.Id }, FormMethod.Get))
+        {
+            @Html.AntiForgeryToken()
+            <input type="submit" value="Edit Ticket" class="btn btn-pink pull-right" />
+        }
+    </li>
+</ol>
+<!-- end breadcrumb -->
+<!-- begin page-header -->
+<h1 class="page-header">Ticket Dashboard <small>For Ticket "@Html.DisplayFor(modelItem => Model.Title)"</small></h1>
+<!-- end page-header -->
+<!-- begin row -->
+<div class="row">
+    <div class="panel panel-inverse WideButton">
+        <div class="panel-heading">
+            <div class="panel-heading-btn">
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-redo"></i></a>
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+            </div>
+            <h4 class="panel-title">Ticket Details</h4>
+        </div>
+        <div class="panel-body table-responsive">
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Title)
+                        </th>
+                        <th>
+                            @Html.DisplayName("Project")
+                        </th>
+                        <th>
+                            @Html.DisplayName("Priority")
+                        </th>
+                        <th>
+                            @Html.DisplayName("Status")
+                        </th>
+                        <th>
+                            @Html.DisplayName("Type")
+                        </th>
+                        <th>
+                            @Html.DisplayName("Assigned Developer")
+                        </th>
+                        <th>
+                            @Html.DisplayName("Created By")
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.Title)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.Project.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.TicketPriority.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.TicketStatus.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.TicketType.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.AssignedToUser.FullName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.OwnerUser.FullName)
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- end row -->
+<!-- begin row -->
+<div class="row">
+    <!-- begin col-8 -->
+    <div class="col-lg-8">
+        <!-- begin panel 1-->
+        <div class="panel panel-inverse" data-sortable-id="index-1">
+            <div class="panel-heading">
+                <div class="panel-heading-btn">
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-redo"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+                </div>
+                <h4 class="panel-title">Ticket History</h4>
+            </div>
+            <div class="panel-body">
+                <div data-scrollbar="true" class="TicketHistoriesHeight">
+                    <!-- begin timeline -->
+                    <ul class="timeline">
+                        @foreach (var history in Model.TicketHistories.OrderByDescending(h => h.ChangedDate))
+                        {
+                            var db = new ApplicationDbContext();
+                            var historyUser = db.Users.Where(u => u.Id == history.UserId).FirstOrDefault();
+                            <li>
+                                <!-- begin timeline-time -->
+                                <div class="timeline-time">
+                                    <span class="date">
+                                        <script>document.write(moment('@history.ChangedDate').format('MMMM Do YYYY'))</script>
+                                    </span>
+                                    <span class="time">
+                                        <script>document.write(moment('@history.ChangedDate').format('h:mm:ss a'))</script>
+                                    </span>
+                                </div>
+                                <!-- end timeline-time -->
+                                <!-- begin timeline-icon -->
+                                <div class="timeline-icon">
+                                    <a></a>
+                                </div>
+                                <!-- end timeline-icon -->
+                                <!-- begin timeline-body -->
+                                <div class="timeline-body">
+                                    <div class="timeline-header">
+                                        <span class="username">Edit Author</span>
+                                        <span class="username pull-right">@historyUser.FullName</span>
+                                        <span class="userimage pull-right"><img src="@historyUser.ProfilePic" alt="" /></span>
+                                    </div>
+                                    <div class="timeline-content">
+                                        @if (history.Property == "AssignedToUserId" && history.OldValue == null)
+                                        {
+                                            <p class="lead">
+                                                "@TicketHistoryHelper.GetHistoryDataFromId(history.NewValue ?? "", history.Property)" was set as the initial Assigned Developer.
+                                            </p>
+                                        }
+                                        else
+                                        {
+                                            <p class="lead">
+                                                The @TicketHistoryHelper.GetPropertyName(history.Property) was changed from "@TicketHistoryHelper.GetHistoryDataFromId(history.OldValue ?? "", history.Property)" to "@TicketHistoryHelper.GetHistoryDataFromId(history.NewValue ?? "", history.Property)".
+                                            </p>
+                                        }
+                                    </div>
+                                    <div class="timeline-footer"></div>
+                                </div>
+                                <!-- end timeline-body -->
+                            </li>
+                        }
+                    </ul>
+                    <!-- end timeline -->
+                </div>
+            </div>
+        </div>
+        <!-- end panel 1-->
+        <!-- begin panel 2-->
+        
+        <!-- end panel 2-->
+        <!-- begin panel 3-->
+        
+        <!-- end panel 3-->
+        <!-- begin panel 4-->
+        
+        <!-- end panel 4-->
+    </div>
+    <!-- end col-8 -->
+    <!-- begin col-4 -->
+    <div class="col-lg-4">
+        <!-- begin panel 5-->
+        <div class="panel panel-inverse" data-sortable-id="index-4">
+            <div class="panel-heading">
+                <div class="panel-heading-btn">
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-redo"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+                </div>
+                <h4 class="panel-title">Ticket Comments (@Model.TicketComments.Count())</h4>
+            </div>
+            <div class="panel-body">
+                <div class="height-sm" data-scrollbar="true">
+                    <ul class="media-list media-list-with-divider media-messaging">
+                        @foreach (var comment in Model.TicketComments.OrderByDescending(m => m.Created))
+                        {
+                            <li class="media media-sm">
+                                <a class="pull-left">
+                                    <img src="@comment.User.ProfilePic" class="media-object rounded-corner" />
+                                </a>
+                                <div class="media-body m-l-10 pull-right">
+                                    <div class="row">
+                                        <h5 class="media-heading">@comment.User.FullName</h5>
+                                        <span><i>&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;@comment.Created.DateTime</i></span>
+                                    </div>
+
+                                    <p>@comment.CommentBody</p>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+            <div class="panel-footer">
+                @using (Html.BeginForm("Create", "TicketComments", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.Hidden("TicketId", Model.Id)
+
+                    <div class="input-group">
+                        <input type="text" class="form-control bg-silver" name="CommentBody" placeholder="Enter message" />
+                        <span class="input-group-append">
+                            <button class="btn btn-pink" type="submit"><i class="fa fa-pencil-alt"></i></button>
+                        </span>
+                    </div>
+                }
+            </div>
+        </div>
+        <!-- end panel 5-->
+        <!-- begin panel 6-->
+        <div class="panel panel-inverse" data-sortable-id="index-7">
+            <div class="panel-heading">
+                <div class="panel-heading-btn">
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-redo"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+                </div>
+                <h4 class="panel-title">Ticket Attachments (@Model.TicketAttachments.Count())</h4>
+            </div>
+            <div class="panel-body p-t-0">
+                <!-- begin widget-list -->
+                <div class="widget-list widget-list-rounded m-b-30">
+                    <!-- begin widget-list-item -->
+                    @foreach (var attachment in Model.TicketAttachments.OrderByDescending(t => t.Created))
+                    {
+                        <div class="widget-list-item">
+                            <div class="widget-list-media">
+                                <a href=@Url.Content(attachment.FilePath) target="_blank" class="img-responsive img-rounded">
+                                    <img src="@AttachmentHelper.DisplayImage(attachment.FilePath)" class="rounded" />
+                                </a>
+                            </div>
+                            <div class="widget-list-content pull-right" style="text-align:right">
+                                <h4 class="widget-list-title m-b-5">@attachment.User.FullName</h4>
+                                <p class="widget-list-desc">@attachment.AttachmentDescription</p>
+                            </div>
+                        </div>
+                    }
+
+                    <!-- end widget-list-item -->
+                </div>
+                <!-- end widget-list -->
+            </div>
+        </div>
+        <!-- end panel 6-->
+        <!-- begin panel 7-->
+        <div class="panel panel-inverse" data-sortable-id="index-6">
+            <div class="panel-heading">
+                <div class="panel-heading-btn">
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-redo"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+                </div>
+                <h4 class="panel-title">Add Attachment</h4>
+            </div>
+            <div class="panel-body">
+                <div class="col-md-12">
+                    @using (Html.BeginForm("Create", "TicketAttachments", new { id = Model.Id}, FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.Hidden("TicketId", Model.Id)
+
+                        <div class="form-group m-b-20">
+                            @Html.Label("Add Attachment", htmlAttributes: new { @class = "control-label col-md-12" })
+                            <div class="col-md-12">
+                                <input type="file" name="attachment" class="filestyle" data-dragdrop="false" data-btnClass="btn-pink" />
+                            </div>
+                        </div>
+                        <div class="form-group m-b-20">
+                            @Html.Label("Description", htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-12">
+                                @Html.TextArea("AttachmentDescription", htmlAttributes: new { @class = "form-control", rows = 10, cols = 20 })
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-pink">Add Attachment</button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <!-- end panel 7-->
+
+    </div>
+    <!-- end col-4 -->
+</div>
+<!-- end row -->
