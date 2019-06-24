@@ -79,133 +79,83 @@
 <!-- end row -->
 <!-- begin row -->
 <div class="row">
-    <!-- begin col-8 -->
-    <div class="col-lg-8">
-        <!-- begin panel -->
-        <div class="panel panel-inverse" data-sortable-id="index-1">
-            <div class="panel-heading">
-                <div class="panel-heading-btn">
-                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
-                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-redo"></i></a>
-                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
-                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
-                </div>
-                <h4 class="panel-title">Tickets Added By Type (Last 7 Days)</h4>
+    <!-- begin panel -->
+    <div class="panel panel-inverse WideButton" data-sortable-id="index-1">
+        <div class="panel-heading">
+            <div class="panel-heading-btn">
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-redo"></i></a>
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
             </div>
-            <div class="panel-body">
-                <div id="nv-stacked-area-chart" class="height-sm"></div>
-            </div>
+            <h4 class="panel-title">Tickets Added By Type (Last 7 Days)</h4>
         </div>
-        <!-- end panel -->
-        <!-- begin tabs -->
-        <div class="panel panel-inverse" data-sortable-id="index-2">
-            <div class="panel-heading">
-                <div class="panel-heading-btn">
-                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
-                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-redo"></i></a>
-                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
-                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
-                </div>
-                <h4 class="panel-title">To Do List</h4>
+        <div class="panel-body">
+            <div id="nv-stacked-area-chart" class="height-sm"></div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <!-- begin panel -->
+    <div class="panel panel-inverse WideButton" data-sortable-id="index-2">
+        <div class="panel-heading">
+            <div class="panel-heading-btn">
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-redo"></i></a>
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
             </div>
-            <div class="panel-body p-0">
-                @{var theUser = db.Users.Find(user);}
-                @using (Html.BeginForm("CustomDelete", "ToDoListItems", FormMethod.Post))
-                {
-                    @Html.AntiForgeryToken()
-                    <div class="widget-todolist widget-todolist-rounded" data-id="widget">
-                        <!-- begin widget-todolist-header -->
-                        <div class="widget-todolist-header">
-                            <div class="widget-todolist-header-left">
-                                <h4 class="widget-todolist-header-title">Remaining Tasks (@theUser.ToDoListItems.Where(i => i.UserId == user && i.IsChecked == false).Count())</h4>
-                            </div>
-                            <div class="widget-todolist-header-right">
-                                <div class="widget-todolist-header-total"><button type="submit" class="invisButton" data-toggle="tooltip" data-placement="left" title="Delete Completed Tasks"><i class="fa fa-trash-alt"></i></button></div>
-                            </div>
+            <h4 class="panel-title">To Do List</h4>
+        </div>
+        <div class="panel-body p-0">
+            @{var theUser = db.Users.Find(user);}
+            @using (Html.BeginForm("CustomDelete", "ToDoListItems", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <div class="widget-todolist widget-todolist-rounded" data-id="widget">
+                    <!-- begin widget-todolist-header -->
+                    <div class="widget-todolist-header">
+                        <div class="widget-todolist-header-left">
+                            <h4 class="widget-todolist-header-title">Remaining Tasks (@theUser.ToDoListItems.Where(i => i.UserId == user && i.IsChecked == false).Count())</h4>
                         </div>
-                        <!-- end widget-todolist-header -->
-                        <!-- begin widget-todolist-body -->
-                        <div class="widget-todolist-body NoBottom">
-                            <ul class="todolist UpASmidge">
-                                @foreach (var item in theUser.ToDoListItems)
+                        <div class="widget-todolist-header-right">
+                            <div class="widget-todolist-header-total"><button type="submit" class="invisButton" data-toggle="tooltip" data-placement="left" title="Delete Completed Tasks"><i class="fa fa-trash-alt"></i></button></div>
+                        </div>
+                    </div>
+                    <!-- end widget-todolist-header -->
+                    <!-- begin widget-todolist-body -->
+                    <div class="widget-todolist-body NoBottom">
+                        <ul class="todolist UpASmidge">
+                            @foreach (var item in theUser.ToDoListItems)
+                            {
+                                if (item.UserId == user)
                                 {
-                                    if (item.UserId == user)
-                                    {
-                                        <li>
-                                            <a href="javascript:;" class="todolist-container active" data-click="todolist" onclick="MarkAsDone(@item.Id)">
-                                                <div class="todolist-input"><i class="fa fa-square"></i></div>
-                                                <div class="todolist-title">@item.Name</div>
-                                            </a>
-                                        </li>
-                                    }
+                                    <li>
+                                        <a href="javascript:;" class="todolist-container active" data-click="todolist" onclick="MarkAsDone(@item.Id)">
+                                            <div class="todolist-input"><i class="fa fa-square"></i></div>
+                                            <div class="todolist-title">@item.Name</div>
+                                        </a>
+                                    </li>
                                 }
-                            </ul>
-                        </div>
-                        <!-- end widget-todolist-body -->
+                            }
+                        </ul>
                     </div>
-                }
-            </div>
-            <div class="panel-footer UpABiggerSmidge">
-                @using (Html.BeginForm("Create", "ToDoListItems", FormMethod.Post))
-                {
-                    @Html.AntiForgeryToken()
-                    <div class="widget-todolist-item">
-                        <div class="widget-todolist-content">
-                            <input type="text" class="form-control" name="Name" placeholder="Write your task here..." />
-                        </div>
+                    <!-- end widget-todolist-body -->
+                </div>
+            }
+        </div>
+        <div class="panel-footer UpABiggerSmidge">
+            @using (Html.BeginForm("Create", "ToDoListItems", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <div class="widget-todolist-item">
+                    <div class="widget-todolist-content">
+                        <input type="text" class="form-control" name="Name" placeholder="Write your task here..." />
                     </div>
-                }
-            </div>
-        </div>
-        <!-- end tabs -->
-        <!-- begin panel -->
-        <!-- end panel -->
-        <!-- begin panel -->
-        <!-- end panel -->
-    </div>
-    <!-- end col-8 -->
-    <!-- begin col-4 -->
-    <div class="col-lg-4">
-        <!-- begin panel -->
-        <div class="panel panel-inverse" data-sortable-id="index-6">
-            <div class="panel-heading">
-                <div class="panel-heading-btn">
-                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
-                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-redo"></i></a>
-                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
-                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
                 </div>
-                <h4 class="panel-title">Calendar</h4>
-            </div>
-            <div class="panel-body">
-                <div id="datepicker-inline" class="datepicker-full-width overflow-y-scroll position-relative"><div></div></div>
-            </div>
+            }
         </div>
-        <!-- end panel -->
-        <!-- begin panel -->
-        <div class="panel panel-inverse" data-sortable-id="index-7">
-            <div class="panel-heading">
-                <div class="panel-heading-btn">
-                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
-                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-redo"></i></a>
-                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
-                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
-                </div>
-                <h4 class="panel-title">Atlas</h4>
-            </div>
-            <div class="panel-body p-0">
-                <div id="world-map" class="height-sm width-full"></div>
-            </div>
-        </div>
-        <!-- end panel -->
-        <!-- begin panel -->
-        <!-- end panel -->
-        <!-- begin panel -->
-        <!-- end panel -->
-        <!-- begin panel -->
-        <!-- end panel -->
     </div>
-    <!-- end col-4 -->
 </div>
 <!-- end row -->
 
