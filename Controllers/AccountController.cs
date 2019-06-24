@@ -270,7 +270,7 @@ namespace Automata_DTaylor_Bugtracker.Controllers
                 var body = "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>";
                 var from = "DT BugTracker<smtp.drew@gmail.com>";
                 var to = model.Email;
-                var email = new MailMessage(from, ConfigurationManager.AppSettings["emailto"])
+                var email = new MailMessage(from, to)
                 {
                     Subject = subject,
                     Body = body,

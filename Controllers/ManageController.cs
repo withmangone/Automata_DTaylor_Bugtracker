@@ -136,7 +136,8 @@ namespace Automata_DTaylor_Bugtracker.Controllers
                 }
                 AddErrors(result);
             }
-            return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
+            TempData["ProfileUpdate"] = "true";
+            return RedirectToAction("Index");
         }
 
 

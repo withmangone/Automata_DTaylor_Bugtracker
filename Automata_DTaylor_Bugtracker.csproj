@@ -272,7 +272,9 @@
     <Content Include="Scripts\bootstrap-filestyle.min.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js.map" />
     <Content Include="Content\bootstrap-datepicker.css.map" />
-    <Content Include="private.config" />
+    <Content Include="private.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Attachments\AndrewTaylorResume0603.pdf" />
     <None Include="Properties\PublishProfiles\dt-bugtracker - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />

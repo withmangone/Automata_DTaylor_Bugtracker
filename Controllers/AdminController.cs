@@ -21,21 +21,21 @@ namespace Automata_DTaylor_Bugtracker.Controllers
         //i want to add a class level property that can help manage projects and the people on them
         private ProjectHelper projHelper = new ProjectHelper();
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult ManageUserRoles(string users, string roles)
-        //{
-        //    ViewBag.Users = new SelectList(db.Users.ToList(), "Id", "FullContactInfo");
-        //    ViewBag.Roles = new SelectList(db.Roles.ToList(), "Name", "Name");
-        //    //i want to ensure thsat the person i selected occupies only one role. therefore the first thing ill do is remove the user from a current role.
-        //    foreach (var role in roleHelper.ListUserRoles(users))
-        //    {
-        //        roleHelper.RemoveUserFromRole(users, role);
-        //    }
-        //    roleHelper.AddUserToRole(users, roles);
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ManageUserRoles(string users, string roles)
+        {
+            ViewBag.Users = new SelectList(db.Users.ToList(), "Id", "FullContactInfo");
+            ViewBag.Roles = new SelectList(db.Roles.ToList(), "Name", "Name");
+            //i want to ensure thsat the person i selected occupies only one role. therefore the first thing ill do is remove the user from a current role.
+            foreach (var role in roleHelper.ListUserRoles(users))
+            {
+                roleHelper.RemoveUserFromRole(users, role);
+            }
+            roleHelper.AddUserToRole(users, roles);
 
-        //    return RedirectToAction("UserIndex", "Admin");
-        //}
+            return RedirectToAction("UserIndex", "Admin");
+        }
 
         [Authorize(Roles = "Admin")]
         public ActionResult UserIndex()
