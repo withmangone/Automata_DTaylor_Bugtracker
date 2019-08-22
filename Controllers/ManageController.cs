@@ -114,16 +114,18 @@ namespace Automata_DTaylor_Bugtracker.Controllers
                 }
             }
 
-            //var user = db.Users.FirstOrDefault(u => u.Email == viewModel.UserViewModel.Email);
-            var userId = User.Identity.GetUserId();
-            var user = db.Users.Find(userId);
-            user.FirstName = userViewModel.FirstName;
-            user.LastName = userViewModel.LastName;
-            user.Email = userViewModel.Email;
-            user.ProfilePic = userViewModel.ProfilePic;
+            if (userViewModel.FirstName != null && userViewModel.LastName != null && userViewModel.Email != null)
+            {
+                var userId = User.Identity.GetUserId();
+                var user = db.Users.Find(userId);
+                user.FirstName = userViewModel.FirstName;
+                user.LastName = userViewModel.LastName;
+                user.Email = userViewModel.Email;
+                user.ProfilePic = userViewModel.ProfilePic;
+            }
             db.SaveChanges();
 
-            if (changePasswordViewModel.NewPassword != null )
+            if (changePasswordViewModel.NewPassword != null && changePasswordViewModel.NewPassword == changePasswordViewModel.ConfirmPassword)
             {
                 var result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), changePasswordViewModel.OldPassword, changePasswordViewModel.NewPassword);
                 if (result.Succeeded)

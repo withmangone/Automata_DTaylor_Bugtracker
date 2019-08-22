@@ -8,16 +8,16 @@ namespace Automata_DTaylor_Bugtracker.ViewModels
 {
     public class UserViewModel
     {        
-        [Required, Display(Name = "First Name")]
+        [Required (AllowEmptyStrings = false), Display(Name = "First Name")]
         public string FirstName { get; set; }
 
-        [Required, Display(Name = "Last Name")]
+        [Required (AllowEmptyStrings = false), Display(Name = "Last Name")]
         public string LastName { get; set; }
 
-        [Required, EmailAddress]
+        [Required (AllowEmptyStrings = false), EmailAddress]
         public string Email { get; set; }
 
-        [Required]
+        [Required (AllowEmptyStrings = false)]
         public HttpPostedFileBase Avatar { get; set; }
 
         public string ProfilePic { get; set; }

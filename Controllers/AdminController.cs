@@ -27,7 +27,22 @@ namespace Automata_DTaylor_Bugtracker.Controllers
         {
             ViewBag.Users = new SelectList(db.Users.ToList(), "Id", "FullContactInfo");
             ViewBag.Roles = new SelectList(db.Roles.ToList(), "Name", "Name");
-            //i want to ensure thsat the person i selected occupies only one role. therefore the first thing ill do is remove the user from a current role.
+            //i need to remove the user from all projects and tickets they've been assigned to, since their responsibilities have changed
+            var userId = db.Users.Find(users).Id;
+
+            if (roleHelper.IsUserInRole(userId, "Developer") == true)
+            {
+                var myTickets = db.Tickets.Where(t => t.AssignedToUserId == userId).ToList();
+                foreach (var ticket in myTickets)
+                {
+                    ticket.AssignedToUserId = null;
+                    var unassigned = db.TicketStatuses.FirstOrDefault(s => s.Name == "Unassigned");
+                    ticket.TicketStatusId = unassigned.Id;
+                }
+            }
+            db.SaveChanges();
+
+            //i want to ensure that the person i selected occupies only one role. therefore the first thing ill do is remove the user from a current role.
             foreach (var role in roleHelper.ListUserRoles(users))
             {
                 roleHelper.RemoveUserFromRole(users, role);

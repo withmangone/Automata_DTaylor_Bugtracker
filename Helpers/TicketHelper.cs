@@ -42,8 +42,8 @@ namespace Automata_DTaylor_Bugtracker.Helpers
         public int GetNewTicketStatus(string oldDeveloper, string newDeveloper)
         {
             var newAssignment = string.IsNullOrEmpty(oldDeveloper) && !string.IsNullOrEmpty(newDeveloper);
-            var unAssignment = !string.IsNullOrEmpty(oldDeveloper) && string.IsNullOrEmpty(newDeveloper);
-            var reAssignment = (!string.IsNullOrEmpty(oldDeveloper) && !string.IsNullOrEmpty(newDeveloper)) && (oldDeveloper != newDeveloper);
+            var unAssignment = string.IsNullOrEmpty(newDeveloper);
+            var reAssignment = !string.IsNullOrEmpty(oldDeveloper) && !string.IsNullOrEmpty(newDeveloper);
 
             var statusId = -1;
             if (newAssignment)

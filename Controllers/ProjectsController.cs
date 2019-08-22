@@ -208,6 +208,13 @@ namespace Automata_DTaylor_Bugtracker.Controllers
         {
             Project project = db.Projects.Find(id);
             project.Deleted = true;
+
+            var ticketsForDeletion = db.Tickets.Where(t => t.ProjectId == project.Id);
+            foreach( var ticket in ticketsForDeletion)
+            {
+                ticket.Deleted = true;
+            }
+
             db.SaveChanges();
             return RedirectToAction("Index");
         }
